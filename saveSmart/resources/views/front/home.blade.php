@@ -1,4 +1,8 @@
 @extends("base")
+
+@section('header')
+@include('layouts.header')
+@endsection
 @section("content")
 <section id="hero" class=" h-[800px]">
                   <div class="container mx-auto px-4">
@@ -68,3 +72,7 @@
                   </div>
                 </section>
 @endsection
+@section('footer')
+@include('layouts.footer')
+@endsection
+

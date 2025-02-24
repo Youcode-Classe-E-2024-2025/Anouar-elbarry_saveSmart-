@@ -1,6 +1,10 @@
 @extends("base")
+
 @section('style')
 <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
+@endsection
+@section('header')
+@include('layouts.header')
 @endsection
 @section('content')
 
@@ -61,8 +65,10 @@
     </div>
   </div>
 @endsection
- 
-  @yield('script')
+@section('footer')
+@include('layouts.footer')
+@endsection
+  @section('script')
   <script>
     function selectProfile(element, profileId) {
       // Reset all profiles
@@ -103,3 +109,5 @@
     }
     
   </script>
+  @endsection
+  

@@ -1,4 +1,7 @@
 @extends('base')
+@section('header')
+@include('layouts.header')
+@endsection
 @section('content')
 <div id="auth-wrapper" class="flex min-h-screen w-full bg-gradient-to-br from-gray-50 to-gray-100">
     <!-- Left Panel -->
@@ -103,6 +106,9 @@
         </div>
     </div>
 </div>
+@section('footer')
+@include('layouts.footer')
+@endsection
 <!-- script -->
   @section('script')
   <script>
@@ -133,3 +139,4 @@ function toggleForm(formType) {
   </script>
   @endsection
 @endsection
+
