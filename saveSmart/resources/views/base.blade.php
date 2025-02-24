@@ -7,6 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
                 <script src="https://cdn.tailwindcss.com"></script>
                 <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+                @yield('style')
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <title>save Smart</title>
 </head>

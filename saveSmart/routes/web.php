@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfilesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +18,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('front/home');
 });
-Route::get('/auth',function (){
-    return view('front/auth');
-});
+Route::get('/select',[ProfilesController::class, 'index']);
+Route::get('/auth',[AuthController::class,'index']);
