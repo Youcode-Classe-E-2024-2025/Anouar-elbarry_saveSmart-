@@ -25,18 +25,16 @@
 
             <!-- Error Alert -->
             <!-- @if ($errors->any()) -->
+
+        @if ($errors->has('login'))
     <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg" role="alert">
-        <ul>
-            error
-            <!-- @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach -->
-        </ul>
+        {{ $errors->first('login') }}
     </div>
+@endif
 @endif
 
             <!-- Sign In Form -->
-            <form id="signin-form" action='/auth/login' method='post' class="space-y-6">
+            <form id="signin-form" action='{{ route('login') }}' method='post' class="space-y-6">
                 @csrf
                 <div class="space-y-4">
                     <div>
@@ -69,12 +67,12 @@
             </form>
 
             <!-- Sign Up Form -->
-            <form id="signup-form" action='/auth/register' method='post' class="hidden space-y-6">
+            <form id="signup-form" action='{{ route('register') }}' method='post' class="hidden space-y-6">
                 @csrf
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Username</label>
-                        <input type="text" name="username" 
+                        <input type="text" name="name" 
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black transition-all duration-200"
                             placeholder="saveSmart">
                     </div>

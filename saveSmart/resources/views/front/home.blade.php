@@ -1,6 +1,6 @@
 @extends("base")
 @section("content")
-<section id="hero" class="pt-14 h-[800px]">
+<section id="hero" class=" h-[800px]">
                   <div class="container mx-auto px-4">
                     <div class="flex flex-col md:flex-row items-center gap-12">
                       <div class="flex-1 text-center md:text-left">

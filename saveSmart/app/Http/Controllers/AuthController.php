@@ -27,6 +27,30 @@ class AuthController extends Controller
        ]);
        
        Auth::login($user);
+      return redirect()->route('profile-Selection');
+    }
 
+    public function login(Request $request ){
+         $credentials =  $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+           ]);
+           \Log::info('Login method accessed');
+           \Log::info('Login attempt', $request->all());
+          if(Auth::attempt($credentials)){
+            return redirect()->route('home');
+          }else{
+            return redirect()->back()->withErrors(['login' => 'password or email are wrong']);
+          };
+
+    }
+
+
+    public function logout(Request $request){
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+       return redirect('/auth');
     }
 }

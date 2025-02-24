@@ -17,6 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('front/home');
-});
-Route::get('/select',[ProfilesController::class, 'index']);
-Route::get('/auth',[AuthController::class,'index']);
+})->name('home');
+Route::get('/select',[ProfilesController::class, 'index'])->name('profile-Selection');
+Route::get('/auth',[AuthController::class,'index'])->name('auth');
+Route::post('/auth/register',[AuthController::class,'register'])->name('register');
+Route::post('/auth/login',[AuthController::class,'login'])->name('login');
+Route::post('/auth/logout',[AuthController::class,'logout'])->name('logout');
+Route::post('/select/create',[ProfilesController::class,'create'])->name('create.profile');
