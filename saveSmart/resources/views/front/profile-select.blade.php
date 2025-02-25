@@ -17,7 +17,7 @@
 
         <!-- Profile 1 -->
          @foreach ($profiles as $profile)
-        <div class="profile-container border-4 border-transparent rounded cursor-pointer" onclick="selectProfile(this, 'profile1')">
+        <a href="{{ route('select',$profile->id) }}" class="profile-container border-4 border-transparent rounded cursor-pointer" onclick="selectProfile(this, 'profile1')">
           <div class="w-32 h-32 md:w-40 md:h-40 relative">
             <img src="{{ $profile->avatar }}" alt="{{ $profile->name }}" class="w-full h-full rounded object-cover">
             <div class="profile-overlay absolute inset-0 bg-black bg-opacity-50 rounded flex items-center justify-center">
@@ -25,7 +25,7 @@
             </div>
           </div>
           <p class="text-center text-gray-400 mt-2 text-lg">{{ $profile->name }}</p>
-        </div>
+        </a>
         @endforeach
         
         <!-- Add Profile Button -->

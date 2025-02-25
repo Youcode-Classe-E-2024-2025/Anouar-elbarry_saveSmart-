@@ -18,4 +18,13 @@ class profiles extends Model
        return $this->belongsTo(User::class);
     }
 
+ public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
 }

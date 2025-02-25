@@ -35,15 +35,21 @@ class ProfilesController extends Controller
 
         \Log::info($profile);
    
-        session(['profile' => $profile]);
+      
       return  redirect()->route('profile-Selection');
     }
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function select($profile_id)
     {
-        //
+        $selectedProfile = Profiles::find($profile_id);
+        $profiles = profiles::all();
+        \Log::info($profiles);
+        session(['profile' => $selectedProfile,
+                       'profiles' => $profiles]);
+        return redirect('/dashboard');
+        
     }
 
     /**

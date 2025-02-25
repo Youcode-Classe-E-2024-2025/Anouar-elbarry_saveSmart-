@@ -18,7 +18,23 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('front/home');
 })->name('home');
+Route::get('/dashboard', function () {
+    return view('back/dashboard');
+});
+Route::get('/income', function () {
+    return view('back/income');
+});
+Route::get('/expense', function () {
+    return view('back/expense');
+});
+Route::get('/goals', function () {
+    return view('back/goals');
+});
+Route::get('/reports', function () {
+    return view('back/reports');
+});
 Route::get('/select',[ProfilesController::class, 'index'])->name('profile-Selection');
+Route::get('/select/{id}',[ProfilesController::class, 'select'])->name('select');
 Route::get('/auth',[AuthController::class,'index'])->name('auth');
 Route::post('/auth/register',[AuthController::class,'register'])->name('register');
 Route::post('/auth/login',[AuthController::class,'login'])->name('login');
