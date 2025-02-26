@@ -38,7 +38,7 @@ class AuthController extends Controller
            \Log::info('Login method accessed');
            \Log::info('Login attempt', $request->all());
           if(Auth::attempt($credentials)){
-            return redirect()->route('home');
+            return redirect()->route('profile-Selection');
           }else{
             return redirect()->back()->withErrors(['login' => 'password or email are wrong']);
           };

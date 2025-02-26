@@ -4,47 +4,42 @@
     <!-- Logo Section -->
     <div class="flex items-center space-x-2 p-4">
         <span class="text-2xl font-bold text-black tracking-tight">SmartSave</span>
-        @if(Auth::check() && session('profile'))
-            <div class="ml-4 flex items-center space-x-2 bg-gray-100 px-3 py-1 rounded-md">
-                <img src="{{ session('profile')->avatar }}" class="w-6 h-6 rounded-full">
-                <span class="text-sm font-medium">{{ session('profile')->getName() }}</span>
-            </div>
-        @endif
+       
     </div>
     <nav class="p-4">
         <ul class="space-y-2">
             <li>
-                <a href="#" class="flex items-center space-x-3 px-3 py-2 bg-neutral-100 rounded-lg hover:bg-neutral-200 transition">
+                <a href="/dashboard" class="flex items-center space-x-3 px-3 py-2 bg-neutral-100 rounded-lg hover:bg-neutral-200 transition">
                     <i class="fa-solid fa-gauge-high"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
             <li>
-                                  <a href="#" class="flex items-center space-x-3 px-3 py-2 bg-neutral-100 rounded-lg">
+                                  <a href="/income" class="flex items-center space-x-3 px-3 py-2 bg-neutral-100 rounded-lg">
                                       <i class="fa-solid fa-wallet"></i>
                                       <span>Income</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" class="flex items-center space-x-3 px-3 py-2 bg-neutral-100 rounded-lg">
+                                  <a href="/expense" class="flex items-center space-x-3 px-3 py-2 bg-neutral-100 rounded-lg">
                                       <i class="fa-solid fa-credit-card"></i>
                                       <span>Expenses</span>
                                   </a>
                               </li>
                               <li>
-                                  <a href="#" class="flex items-center space-x-3 px-3 py-2 bg-neutral-100 rounded-lg">
+                                  <a href="/goals" class="flex items-center space-x-3 px-3 py-2 bg-neutral-100 rounded-lg">
                                       <i class="fa-solid fa-bullseye"></i>
                                       <span>Goals</span>
                                   </a>
                               </li>
                               <li>
-                    <a href="#" class="flex items-center space-x-3 px-3 py-2 hover:bg-neutral-50 rounded-lg">
+                    <a href="/categories" class="flex items-center space-x-3 px-3 py-2 hover:bg-neutral-50 rounded-lg">
                         <i class="fa-solid fa-tags"></i>
                         <span>Categories</span>
                     </a>
                 </li>
                               <li>
-                    <a href="#" class="flex items-center space-x-3 px-3 py-2 bg-neutral-100 rounded-lg">
+                    <a href="/reports" class="flex items-center space-x-3 px-3 py-2 bg-neutral-100 rounded-lg">
                         <i class="fa-solid fa-chart-line"></i>
                         <span>Reports</span>
                     </a>
@@ -63,6 +58,27 @@
 <nav class="bg-gradient-to-r from-white to-gray-50 border-b border-gray-100 ml-64">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
+        @if(Auth::check() && session('profile'))
+    <div class="relative">
+    <button class="ml-4 flex items-center space-x-2 bg-gray-100 px-3 py-1 rounded-md profile-button">
+        <img src="{{ session('profile')->avatar }}" class="w-6 h-6 rounded-full">
+        <span class="text-sm font-medium">{{ session('profile')->getName() }}</span>
+    </button>
+    <!-- Dropdown Menu -->
+    <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20 hidden dropdown-menu">
+        @foreach(session('profiles') as $profile)
+            <a href="{{ route('select', $profile->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                <img src="{{ $profile->avatar }}" class="w-6 h-6 rounded-full mr-2">
+                {{ $profile->getName() }}
+            </a>
+        @endforeach
+        <div class="border-t border-gray-100"></div>
+        <a href="/manage-profiles" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            Manage Profiles
+        </a>
+    </div>
+</div>
+    @endif
             <!-- Navigation Links -->
             <div class="hidden md:flex items-center space-x-8">
                 <a href="/" class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-black hover:bg-gray-50 rounded-md transition duration-150 ease-in-out">Home</a>

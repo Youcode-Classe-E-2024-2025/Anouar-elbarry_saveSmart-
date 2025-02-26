@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\profiles;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Models\Income;
 use Illuminate\Support\Facades\Auth;
-
-class ProfilesController extends Controller
+class IncomeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $profiles = profiles::where('user_id',Auth::id())->get();
-        return view('front.profile-select',compact('profiles'));
+        $incomes = Income::where('user_id', Auth::id())->get(); 
+        \Log::info($incomes);
+        return view('back.income',compact('incomes'));
     }
 
     /**
@@ -24,33 +23,32 @@ class ProfilesController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'name' => 'string|max:255|unique:profiles,name',
-            'avatar' => 'string|unique:profiles,avatar'
+            'source' => 'required|string', 
+            'amount' => 'required|numeric',
+            'date' => 'required|date', 
         ]);
 
-        $profile = Profiles::create([
-           'name' => $request->name,
-           'avatar' => $request->avatar,
-           'user_id' => auth()->id()
+        $income = Income::create([
+            'user_id' => Auth::id(), 
+            'profile_id' => session('profile')->getId(),
+            'source' => $request->source,
+            'amount' => $request->amount,
+            'date' => $request->date,
         ]);
-
-        \Log::info($profile);
-   
-      
-      return  redirect()->route('profile-Selection');
+        if($income){
+            return redirect()->back()->with('success', 'Income record created successfully.');
+        }else{
+            return redirect()->back()->with('error', 'Income record has not created.');
+        }
+        
     }
+
     /**
      * Store a newly created resource in storage.
      */
-    public function select($profile_id)
+    public function store(Request $request)
     {
-        $selectedProfile = Profiles::find($profile_id);
-        $profiles = profiles::where('user_id',Auth::id())->get();
-        \Log::info($profiles);
-        session(['profile' => $selectedProfile,
-                       'profiles' => $profiles]);
-        return redirect('/dashboard');
-        
+        //
     }
 
     /**
