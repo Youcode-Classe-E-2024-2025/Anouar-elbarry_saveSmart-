@@ -129,34 +129,36 @@
         const dropdownMenu = document.querySelector('.dropdown-menu'); // Add a class to your dropdown
 
         // Toggle dropdown visibility on button click
-        profileButton.addEventListener('click', function (event) {
-            event.stopPropagation(); // Prevent event bubbling
-            dropdownMenu.classList.toggle('hidden'); // Toggle the hidden class
-        });
+        if (profileButton && dropdownMenu) {
+            profileButton.addEventListener('click', function (event) {
+                event.stopPropagation(); // Prevent event bubbling
+                dropdownMenu.classList.toggle('hidden'); // Toggle the hidden class
+            });
 
-        // Close the dropdown if clicked outside
-        document.addEventListener('click', function () {
-            if (!dropdownMenu.classList.contains('hidden')) {
-                dropdownMenu.classList.add('hidden'); // Hide the dropdown
-            }
-        });
+            // Close the dropdown if clicked outside
+            document.addEventListener('click', function () {
+                if (!dropdownMenu.classList.contains('hidden')) {
+                    dropdownMenu.classList.add('hidden'); // Hide the dropdown
+                }
+            });
+        }
 
         const alertBox = document.querySelector(".error-alert");
-  const closeButton = alertBox.querySelector("button");
+        const closeButton = alertBox ? alertBox.querySelector("button") : null;
 
-  if (alertBox) {
-    // Auto-hide after 5 seconds
-    setTimeout(() => {
-      alertBox.style.opacity = "0";
-      setTimeout(() => alertBox.remove(), 500); // Remove after fade-out
-    }, 5000);
+        if (alertBox && closeButton) {
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                alertBox.style.opacity = "0";
+                setTimeout(() => alertBox.remove(), 500); // Remove after fade-out
+            }, 5000);
 
-    // Manual close on button click
-    closeButton.addEventListener("click", () => {
-      alertBox.style.opacity = "0";
-      setTimeout(() => alertBox.remove(), 500);
-    });
-  }
+            // Manual close on button click
+            closeButton.addEventListener("click", () => {
+                alertBox.style.opacity = "0";
+                setTimeout(() => alertBox.remove(), 500);
+            });
+        }
     });
 
 </script>

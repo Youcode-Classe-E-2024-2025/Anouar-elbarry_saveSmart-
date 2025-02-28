@@ -36,11 +36,14 @@
                                           </tr>
                                       </thead>
                                       <tbody class="divide-y divide-neutral-200">
-                                        @foreach ($expenses as $expense )
-                                        
-                                     
+                                        @forelse ($expenses as $expense )
                                           <tr class="hover:bg-neutral-50">
-                                              <td class="px-6 py-4">{{ $expense->category->name }}</td>
+                                            @if ($expense->category)
+                                   
+                                            <td class="px-6 py-4">{{ $expense->category->name }}</td>
+                                            @else
+                                            <td class="text-gray-300 px-6 py-4">Not Categorized</td>
+                                            @endif
                                               <td class="px-6 py-4">{{ $expense->amount }} DH</td>
                                               <td class="px-6 py-4">{{ $expense->formatted_date}}</td>
                                               <td class="px-6 py-4">
@@ -49,16 +52,26 @@
                                                       <span>{{ $expense->profile->name }}</span>
                                                   </div>
                                               </td>
-                                              <td class="px-6 py-4 text-right space-x-2">
+                                              <td class="flex justify-end px-6 py-4 text-right space-x-4">
                                                   <button class="text-neutral-600 hover:text-neutral-900">
                                                       <i class="fa-solid fa-pen-to-square"></i>
                                                   </button>
-                                                  <button class="text-neutral-600 hover:text-neutral-900">
-                                                      <i class="fa-solid fa-trash"></i>
-                                                  </button>
+                                                  <form method="post" action="{{ route('expense.delet',$expense->id) }}" class="text-neutral-600 hover:text-neutral-900 p-0 m-0">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                  </form>
                                               </td>
                                           </tr>
-                                          @endforeach
+                                          @empty
+                                        <tr>
+                                             <td colspan="5" class="text-center py-6 text-gray-500">
+                                                 No Expense records found. Click "Add Expense" to get started.
+                                             </td>
+                                         </tr>
+                                         @endforelse
                                       </tbody>
                                   </table>
                               </div>

@@ -3,38 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expense;
-use Auth;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Models\Income;
 use Illuminate\Http\Request;
-use App\Models\Category;
-use Nette\Schema\Expect;
-class CategoryController extends Controller
+use Illuminate\Support\Facades\Auth;
+
+
+class DashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $categories = Category::where('user_id',Auth::id())->get();
-        return view('back.categories',compact('categories'));
+       $totalIncomes= Income::where('user_id',Auth::id())->sum('amount');
+       $totalExpenses= Expense::where('user_id',Auth::id())->sum('amount');
+       return view('back.dashboard',compact('totalIncomes','totalExpenses'));
+
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create()
     {
-        \Log::info($request);
-        $request->validate([
-            'name' => 'required|string'
-        ]);
-        $category = Category::create([
-            'name' => $request->name,
-            'user_id' => Auth::id()
-        ]);
-
-        \Log::info($category);
-        return redirect()->back()->with('success','category added successfully');
+        //
     }
 
     /**
@@ -74,8 +66,6 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $category = Category::findOrFail($id);
-        $category->delete();
-        return redirect()->back()->with('success','category deleted successfully');
+        //
     }
 }

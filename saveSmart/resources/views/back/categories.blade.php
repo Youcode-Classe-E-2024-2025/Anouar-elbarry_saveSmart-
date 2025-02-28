@@ -16,20 +16,30 @@
                                       </tr>
                                   </thead>
                                   <tbody class="divide-y divide-neutral-200">
-                                    @foreach ($categories as $category)
+                                    @forelse ($categories as $category)
                                       <tr>
                                           <td class="px-6 py-4 text-sm">{{$category->name}}</td>
                                           <td class="px-6 py-4 text-sm text-neutral-600">{{$category->created_at}}</td>
-                                          <td class="px-6 py-4 text-right">
+                                          <td class="flex justify-end items-center cursor-pointer px-6 py-4 text-right">
                                               <button class="text-neutral-600 hover:text-neutral-900 mr-3">
                                                   <i class="fa-solid fa-pen-to-square"></i>
                                               </button>
-                                              <button class="text-neutral-600 hover:text-neutral-900">
-                                                  <i class="fa-solid fa-trash"></i>
+                                              <form action="{{ route('create.delete',$category->id) }}" method="POST" class="text-neutral-600 hover:text-neutral-900">
+                                              @csrf
+                                              @method('DELETE')  
+                                              <button type="submit">
+                                              <i class="fa-solid fa-trash"></i>
                                               </button>
+                                              </form>
                                           </td>
                                       </tr>
-                                      @endforeach
+                                      @empty
+                                        <tr>
+                                             <td colspan="5" class="text-center py-6 text-gray-500">
+                                                 No Categories records found. Click "Add Category" to get started.
+                                             </td>
+                                         </tr>
+                                         @endforelse
                                   </tbody>
                               </table>
                           </div>

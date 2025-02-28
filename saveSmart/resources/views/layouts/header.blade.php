@@ -14,7 +14,7 @@
     <!-- Dropdown Menu -->
     <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20 hidden dropdown-menu">
         @foreach(session('profiles') as $profile)
-            <a href="{{ route('select', $profile->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            <a href="{{ route('profile.show', $profile->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                 <img src="{{ $profile->avatar }}" class="w-6 h-6 rounded-full mr-2">
                 {{ $profile->getName() }}
             </a>

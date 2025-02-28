@@ -17,12 +17,12 @@
                       <div id="overview-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                           <div class="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
                               <h2 class="text-lg mb-2">Total Income</h2>
-                              <p class="text-3xl">$8,547.00</p>
+                              <p class="text-3xl">{{ $totalIncomes }}DH</p>
                               <p class="text-sm text-neutral-500 mt-2">+12.5% from last month</p>
                           </div>
                           <div class="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
                               <h2 class="text-lg mb-2">Total Expenses</h2>
-                              <p class="text-3xl">$4,320.00</p>
+                              <p class="text-3xl">{{ $totalExpenses }}DH</p>
                               <p class="text-sm text-neutral-500 mt-2">-3.2% from last month</p>
                           </div>
                           <div class="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">

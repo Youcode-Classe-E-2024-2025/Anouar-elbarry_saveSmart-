@@ -83,6 +83,8 @@ class expenseController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $expense = Expense::findOrFail($id);
+        $expense->delete();
+        return redirect()->back()->with('success','expense deleted successfully');
     }
 }

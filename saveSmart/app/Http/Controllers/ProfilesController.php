@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expense;
 use App\Models\profiles;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +25,7 @@ class ProfilesController extends Controller
      */
     public function create(Request $request)
     {
+        try{
         $request->validate([
             'name' => 'string|max:255|unique:profiles,name',
             'avatar' => 'string|unique:profiles,avatar'
@@ -38,6 +41,9 @@ class ProfilesController extends Controller
    
       
       return  redirect()->route('profile-Selection');
+    }catch(Exception $e){
+      return redirect()->back()->with('error',$e->getMessage());
+    }
     }
     /**
      * Store a newly created resource in storage.
@@ -58,7 +64,22 @@ class ProfilesController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $profile = profiles::findOrFail($id);
+
+        $expenses = Expense::where('profile_id',$profile->id)
+                    ->with('category')
+                    ->orderBy('created_at')
+                    ->get();
+        $totalExpenses = $expenses->sum('amount');
+        $expensesByCategory = $expenses->groupBy(function($expense){
+                    return $expense->category ? $expense->category->name :'Uncategoriszd';
+        })->map(function($categoryExpenses){
+            return [
+                'total'=> $categoryExpenses->sum('amount'),
+                'count'=> $categoryExpenses->count()
+            ];
+        });
+        return view('back.profile-details', compact('profile', 'expenses', 'totalExpenses', 'expensesByCategory'));
     }
 
     /**
@@ -82,6 +103,7 @@ class ProfilesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $profile = profiles::findOrFail($id);
+        $profile->delete();
     }
 }
