@@ -64,25 +64,26 @@ class IncomeController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $income = income::find($id);
+        return response()->json($income);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,Income $income)
+    public function update(Request $request,$id)
     {
+        $income = Income::findOrFail($id);
         $validated = $request->validate([
         'source' => 'required',
         'amount' => 'required|numeric|min:0',
         'date' => 'required|date|before_or_equal:today'
         ]);
         try {
+            // dd($income);
             $income->update($validated);
-            
-            return $request->wantsJson()
-                ? response()->json(['success' => 'Income updated successfully'])
-                : redirect()->route('income.home')->with('success', 'Income updated successfully');
+            // dd($income->update($validated));
+            return redirect()->route('income.home')->with('success', 'Income updated successfully');
         } catch (\Exception $e) {
             \Log::error($e);
             return back()->withInput()->with('error', 'Error updating income');

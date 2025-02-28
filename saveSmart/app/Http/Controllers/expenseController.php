@@ -67,7 +67,8 @@ class expenseController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $expense = Expense::with('category')->findOrFail($id);
+        return response()->json($expense);
     }
 
     /**
@@ -75,7 +76,14 @@ class expenseController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $expense = Expense::findOrFail($id);
+        $validated = $request->validate([
+                 'category_id' => 'required', 
+                 'amount' => 'required|numeric',
+                 'date' => 'required|date|before_or_equal:today', 
+        ]);
+        $expense->update($validated);
+        return redirect()->back()->with('success','expense updated successfully');
     }
 
     /**

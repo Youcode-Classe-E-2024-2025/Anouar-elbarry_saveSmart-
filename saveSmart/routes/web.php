@@ -51,9 +51,12 @@ Route::post('/select/create',[ProfilesController::class,'create'])->name('create
 Route::post('/dashboard/add_income',[IncomeController::class,'create'])->name('create.income');
 Route::delete('/income/delete/{id}',[IncomeController::class,'destroy'])->name('delete.income');
 Route::get('/income',[IncomeController::class,'index'])->name('income.home');
-Route::put('/income/update/{id}', [IncomeController::class, 'update'])->name('income.update');
+Route::get('/income/{id}/edit',[IncomeController::class,'edit']);
+Route::put('/income/{id}/update', [IncomeController::class, 'update'])->name('income.update');
 
 //expense
 Route::get('/expense',[expenseController::class,'index'])->name('expense');
+Route::get('/expense/{id}/edit',[expenseController::class,'edit']);
+Route::put('/expense/{id}/update',[expenseController::class,'update']);
 Route::post('/expense/create',[expenseController::class,'create'])->name('expense.create');
 Route::delete('/expense/delet/{id}',[expenseController::class,'destroy'])->name('expense.delet');

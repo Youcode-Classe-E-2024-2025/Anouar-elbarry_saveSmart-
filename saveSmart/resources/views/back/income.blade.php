@@ -52,9 +52,7 @@
                                               <td class="flex justify-end px-6 py-4 text-right space-x-4">
                                                 @if (session('profile')->getId() == $income->profile->id)
                                                 <button  class="Update_openModalBtn text-neutral-600 hover:text-neutral-900"
-                                                  data-source="{{ $income->source }}"
-                                                  data-amount="{{ $income->amount }}"
-                                                  data-date="{{ $income->date }}">
+                                                  data-id="{{ $income->id }}">
                                                       <i class="fa-solid fa-pen-to-square"></i>
                                                   </button>
                                                 @endif
@@ -232,28 +230,25 @@
     const update_modal = document.getElementById('update_incomeModal');
     const update_incomeForm = document.getElementById('Update_incomeForm');
 
-    // Populate modal with current income data
-    function populateUpdateModal(income) {
-        document.getElementById('update_source').value = income.source;
-        document.getElementById('Update_amount').value = income.amount;
-        document.getElementById('update_date').value = income.date;
-    }
+
 
     // Open modal function
     function update_openModal(event) {
         const clickedButton = event.currentTarget;
-        const incomeData = {
-            source: clickedButton.getAttribute('data-source'),
-            amount: clickedButton.getAttribute('data-amount'),
-            date: clickedButton.getAttribute('data-date')
-        };
+        const incomeId =  clickedButton.getAttribute('data-id');
+        console.log(incomeId);
 
-        // Update form action to include the specific income ID
-        const incomeId = clickedButton.closest('tr').getAttribute('data-income-id');
-        update_incomeForm.action = `income/update/${incomeId}`;
-        // console.log(${incomeId});
-        
-        populateUpdateModal(incomeData);
+        fetch(`/income/${incomeId}/edit`)
+        .then(response => response.json())
+        .then(income => {
+              // Populate modal with fetched data
+            document.getElementById('update_source').value = income.source;
+            document.getElementById('Update_amount').value = income.amount;
+            document.getElementById('update_date').value = income.date;
+
+            // set form url --
+            update_incomeForm.action = `/income/${incomeId}/update`;
+        })
 
         update_modalBackdrop.classList.remove('invisible', 'opacity-0');
         update_modalBackdrop.classList.add('opacity-100');
@@ -274,37 +269,37 @@
     }
 
     // Form submission handler
-    update_incomeForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+    // update_incomeForm.addEventListener('submit', async (e) => {
+    //     e.preventDefault();
 
-        try {
-            const formData = new FormData(update_incomeForm);
-            const response = await fetch(update_incomeForm.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
+    //     try {
+    //         const formData = new FormData(update_incomeForm);
+    //         const response = await fetch(update_incomeForm.action, {
+    //             method: 'POST',
+    //             body: formData,
+    //             headers: {
+    //                 'Accept': 'application/json'
+    //             }
+    //         });
 
-            const result = await response.json();
+    //         const result = await response.json();
 
-            if (result.success) {
-                window.location.reload();
-            } else {
-                // Handle validation errors
-                Object.keys(result.errors || {}).forEach(field => {
-                    const errorElement = document.querySelector(`.${field}-error`);
-                    if (errorElement) {
-                        errorElement.textContent = result.errors[field][0];
-                    }
-                });
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while updating the income');
-        }
-    });
+    //         if (result.success) {
+    //             window.location.reload();
+    //         } else {
+    //             // Handle validation errors
+    //             Object.keys(result.errors || {}).forEach(field => {
+    //                 const errorElement = document.querySelector(`.${field}-error`);
+    //                 if (errorElement) {
+    //                     errorElement.textContent = result.errors[field][0];
+    //                 }
+    //             });
+    //         }
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         alert('An error occurred while updating the income');
+    //     }
+    // });
 
     // Add event listeners to each button
     update_openModalBtns.forEach(button => {
