@@ -45,7 +45,7 @@
                                               <td class="px-6 py-4">{{ $income->date }}</td>
                                               <td class="px-6 py-4">
                                                   <div class="flex items-center space-x-2">
-                                                      <img src="{{ $income->profile->avatar }}" class="w-6 h-6 rounded-full"/>
+                                                      <img src="storage/{{ $income->profile->avatar }}" class="w-6 h-6 rounded-full"/>
                                                       <span>{{ $income->profile->name }}</span>
                                                   </div>
                                               </td>

@@ -48,7 +48,7 @@
                                               <td class="px-6 py-4">{{ $expense->formatted_date}}</td>
                                               <td class="px-6 py-4">
                                                   <div class="flex items-center space-x-2">
-                                                      <img src="{{ $expense->profile->avatar }}" class="w-6 h-6 rounded-full"/>
+                                                      <img src="storage/{{ $expense->profile->avatar }}" class="w-6 h-6 rounded-full"/>
                                                       <span>{{ $expense->profile->name }}</span>
                                                   </div>
                                               </td>

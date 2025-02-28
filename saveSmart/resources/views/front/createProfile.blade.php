@@ -32,6 +32,9 @@
                     <div class="col-span-1">
                         <label for="profile-name" class="block text-sm font-medium text-gray-700">Full Name</label>
                         <input id="profile-name" name="name" type="text" required class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="John Doe">
+                        @error('name')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="col-span-1">
                         <label class="block text-sm font-medium text-gray-700">
@@ -46,6 +49,9 @@
                                     <label for="profile-avatar" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                         <span>Upload a file</span>
                                         <input id="profile-avatar" name="avatar" type="file" class="sr-only" accept="image/*" onchange="handleFileChange(event)">
+                                        @error('avatar')
+                                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                        @enderror
                                     </label>
                                     <p class="pl-1">or drag and drop</p>
                                 </div>

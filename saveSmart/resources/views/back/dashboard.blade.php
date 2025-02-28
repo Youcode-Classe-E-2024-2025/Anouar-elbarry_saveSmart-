@@ -17,17 +17,17 @@
                       <div id="overview-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                           <div class="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
                               <h2 class="text-lg mb-2">Total Income</h2>
-                              <p class="text-3xl">{{ $totalIncomes }}DH</p>
+                              <p class="text-3xl">{{ $totalIncomes }} <span class="text-gray-500">DH</span></p>
                               <p class="text-sm text-neutral-500 mt-2">+12.5% from last month</p>
                           </div>
                           <div class="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
                               <h2 class="text-lg mb-2">Total Expenses</h2>
-                              <p class="text-3xl">{{ $totalExpenses }}DH</p>
+                              <p class="text-3xl">{{ $totalExpenses }} <span class="text-gray-500">DH</span></p>
                               <p class="text-sm text-neutral-500 mt-2">-3.2% from last month</p>
                           </div>
                           <div class="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
                               <h2 class="text-lg mb-2">Net Savings</h2>
-                              <p class="text-3xl">$4,227.00</p>
+                              <p class="text-3xl">{{ $netSaving }} <span class="text-gray-500">DH</span></p>
                               <p class="text-sm text-neutral-500 mt-2">+28.4% from last month</p>
                           </div>
                       </div>
@@ -50,36 +50,19 @@
                               <h2 class="text-lg">Recent Transactions</h2>
                           </div>
                           <div class="divide-y divide-neutral-200">
+                            @foreach ($transactions as $transaction)
                               <div class="px-6 py-4 flex items-center justify-between">
                                   <div class="flex items-center space-x-4">
-                                      <img src="https://api.dicebear.com/7.x/notionists/svg?scale=200&seed=456" alt="User" class="w-8 h-8 rounded-full"/>
+                                      <img src="storage/{{ $transaction->profile->avatar }}" alt="{{ $transaction->profile->name }}" class="w-8 h-8 rounded-full"/>
                                       <div>
-                                          <p>Grocery Shopping</p>
-                                          <p class="text-sm text-neutral-500">Added by Sarah</p>
+                                          <p></p>
+                                          <p class="text-sm text-neutral-500">Added by {{ $transaction->profile->name }}</p>
                                       </div>
                                   </div>
-                                  <span>-$156.32</span>
+                                  <span class="{{ $transaction->type == 'income' ? 'text-green-600' : 'text-red-600' }}"> {{ $transaction->type == 'income' ? '+' : '-' }} {{ $transaction->amount }} DH</span>
                               </div>
-                              <div class="px-6 py-4 flex items-center justify-between">
-                                  <div class="flex items-center space-x-4">
-                                      <img src="https://api.dicebear.com/7.x/notionists/svg?scale=200&seed=789" alt="User" class="w-8 h-8 rounded-full"/>
-                                      <div>
-                                          <p>Salary Deposit</p>
-                                          <p class="text-sm text-neutral-500">Added by John</p>
-                                      </div>
-                                  </div>
-                                  <span>+$3,500.00</span>
-                              </div>
-                              <div class="px-6 py-4 flex items-center justify-between">
-                                  <div class="flex items-center space-x-4">
-                                      <img src="https://api.dicebear.com/7.x/notionists/svg?scale=200&seed=101" alt="User" class="w-8 h-8 rounded-full"/>
-                                      <div>
-                                          <p>Utilities Bill</p>
-                                          <p class="text-sm text-neutral-500">Added by Emma</p>
-                                      </div>
-                                  </div>
-                                  <span>-$245.00</span>
-                              </div>
+                            @endforeach
+                      
                           </div>
                       </div>
                       @endsection

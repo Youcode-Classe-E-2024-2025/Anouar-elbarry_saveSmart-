@@ -25,7 +25,7 @@ class ProfilesController extends Controller
      */
     public function create(Request $request)
     {
-        try{
+
         $request->validate([
             'name' => 'string|max:255',
             'avatar' => 'image|mimes:jpeg,png,jpg,gif|max:2048|unique:profiles,avatar'
@@ -42,9 +42,6 @@ class ProfilesController extends Controller
    
       
       return  redirect()->route('profile-Selection');
-    }catch(Exception $e){
-      return redirect()->back()->with('error',$e->getMessage());
-    }
     }
     /**
      * Store a newly created resource in storage.

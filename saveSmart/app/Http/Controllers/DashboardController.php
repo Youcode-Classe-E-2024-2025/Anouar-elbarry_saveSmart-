@@ -17,11 +17,37 @@ class DashboardController extends Controller
     {
        $totalIncomes= Income::where('user_id',Auth::id())->sum('amount');
        $totalExpenses= Expense::where('user_id',Auth::id())->sum('amount');
-       return view('back.dashboard',compact('totalIncomes','totalExpenses'));
+       $netSaving = $totalIncomes - $totalExpenses ;
+       $incomes = Income::where('user_id',Auth::id())
+                          ->with('profile')
+                          ->select('id', 'profile_id', 'amount', 'created_at')
+                          ->addSelect(\DB::raw("'income' as type"))
+                          ->get();
+
+       $expenses = Expense::where('user_id',Auth::id())
+                          ->with('profile')
+                          ->select('id', 'profile_id', 'amount', 'created_at')
+                          ->addSelect(\DB::raw("'expense' as type"))
+                          ->get();
+
+        $transactions = $incomes->merge($expenses)->sortByDesc('created_at');
+        $transactions = $this->paginate($transactions,6);
+       return view('back.dashboard',compact('totalIncomes','totalExpenses','transactions','netSaving'));
 
     }
-
-    /**
+    private function paginate($items, $perPage)
+    {
+        $page = request()->input('page', 1);
+        $offset = ($page - 1) * $perPage;
+    
+        return new \Illuminate\Pagination\LengthAwarePaginator(
+            $items->slice($offset, $perPage),
+            $items->count(),
+            $perPage,
+            $page,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+    }    /**
      * Show the form for creating a new resource.
      */
     public function create()
