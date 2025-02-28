@@ -61,14 +61,14 @@
         @if(Auth::check() && session('profile'))
     <div class="relative">
     <button class="ml-4 flex items-center space-x-2 bg-gray-100 px-3 py-1 rounded-md profile-button">
-        <img src="{{ session('profile')->avatar }}" class="w-6 h-6 rounded-full">
+        <img src="storage/{{ session('profile')->avatar }}" class="w-6 h-6 rounded-full">
         <span class="text-sm font-medium">{{ session('profile')->getName() }}</span>
     </button>
     <!-- Dropdown Menu -->
     <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20 hidden dropdown-menu">
         @foreach(session('profiles') as $profile)
             <a href="{{ route('select', $profile->id) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                <img src="{{ $profile->avatar }}" class="w-6 h-6 rounded-full mr-2">
+                <img src="storage/{{ $profile->avatar }}" class="w-6 h-6 rounded-full mr-2">
                 {{ $profile->getName() }}
             </a>
         @endforeach
@@ -89,7 +89,7 @@
                 <div class="flex items-center space-x-4">
                     <button class="flex items-center space-x-2">
                         <img src="https://ui-avatars.com/api/?name={{ Auth::user()->name }}&background=random" alt="User Avatar" class="w-10 h-10 rounded-full">
-                        <span>{{ Auth::user()->name }}</span>
+                        <span class="text-gray-500 font-medium pr-2">{{ Auth::user()->name }}</span> Family
                         <form action="{{ route('logout') }}" method="POST" class="inline-block">
                             @csrf
                             <button type="submit" class="ml-2">

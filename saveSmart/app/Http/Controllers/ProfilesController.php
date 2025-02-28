@@ -27,13 +27,14 @@ class ProfilesController extends Controller
     {
         try{
         $request->validate([
-            'name' => 'string|max:255|unique:profiles,name',
-            'avatar' => 'string|unique:profiles,avatar'
+            'name' => 'string|max:255',
+            'avatar' => 'image|mimes:jpeg,png,jpg,gif|max:2048|unique:profiles,avatar'
         ]);
-
+         
+        $avatarPath = $request->file('avatar')->store('uploads','public');
         $profile = Profiles::create([
            'name' => $request->name,
-           'avatar' => $request->avatar,
+           'avatar' => $avatarPath,
            'user_id' => auth()->id()
         ]);
 

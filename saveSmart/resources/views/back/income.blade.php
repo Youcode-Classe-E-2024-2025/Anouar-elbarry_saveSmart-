@@ -118,6 +118,9 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </div>
+                            @error('source')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                     
@@ -133,6 +136,9 @@
                         <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Amount:</label>
                         <input type="number" id="amount" name="amount" step="0.01" required
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            @error('amount')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                     </div>
                     
                     <!-- Date Field -->
@@ -140,6 +146,9 @@
                         <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Date:</label>
                         <input type="date" id="date" name="date" required
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            @error('date')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                     </div>
                     
                     <!-- Submit Button -->
@@ -200,6 +209,9 @@
                          <label for="update_amount" class="block text-sm font-medium text-gray-700 mb-1">Amount:</label>
                          <input type="number" id="Update_amount" name="amount" step="0.01" required
                              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                             @error('amount')
+                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                             @enderror
                      </div>
                      
                      
@@ -208,6 +220,9 @@
                          <label for="update_date" class="block text-sm font-medium text-gray-700 mb-1">Date:</label>
                          <input type="date" id="update_date" name="date" required
                              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                             @error('date')
+                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                             @enderror
                      </div>
                      
                      <!-- Submit Button -->

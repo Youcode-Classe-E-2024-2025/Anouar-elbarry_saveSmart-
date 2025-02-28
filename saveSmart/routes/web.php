@@ -34,18 +34,22 @@ Route::get('/categories', [CategoryController::class, 'index'])->name('categorie
 Route::post('/categories/create', [CategoryController::class, 'create'])->name('create.category');
 Route::delete('/categories/delete/{id}', [CategoryController::class, 'destroy'])->name('create.delete');
 
-Route::get('/select',[ProfilesController::class, 'index'])->name('profile-Selection');
-Route::get('/select/{id}',[ProfilesController::class, 'select'])->name('select');
-Route::get('profile/{id}', [ProfilesController::class,'show'])->name('profile.show');
+
 
 // Auth
-Route::get('/auth',[AuthController::class,'index'])->name('auth');
+Route::get('/auth',[AuthController::class,'index'])->name('auth')->middleware('guest');
 Route::post('/auth/register',[AuthController::class,'register'])->name('register');
 Route::post('/auth/login',[AuthController::class,'login'])->name('login');
 Route::post('/auth/logout',[AuthController::class,'logout'])->name('logout');
 
 //profile
 Route::post('/select/create',[ProfilesController::class,'create'])->name('create.profile');
+Route::get('/profile/form',function(){
+    return view('front.createProfile');
+});
+Route::get('/select',[ProfilesController::class, 'index'])->name('profile-Selection');
+Route::get('/select/{id}',[ProfilesController::class, 'select'])->name('select');
+Route::get('profile/{id}', [ProfilesController::class,'show'])->name('profile.show');
 
 //income
 Route::post('/dashboard/add_income',[IncomeController::class,'create'])->name('create.income');
