@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Expense;
+use App\Models\goals;
 use App\Models\Income;
+use App\Models\totalbalance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 
 class DashboardController extends Controller
 {
@@ -17,7 +19,9 @@ class DashboardController extends Controller
     {
        $totalIncomes= Income::where('user_id',Auth::id())->sum('amount');
        $totalExpenses= Expense::where('user_id',Auth::id())->sum('amount');
-       $netSaving = $totalIncomes - $totalExpenses ;
+       $netSaving= goals::where('user_id',Auth::id())->sum('saved_amount');
+       $totalbalance = totalbalance::where('user_id',Auth::id())->get();
+    //    dd($totalbalance);
        $incomes = Income::where('user_id',Auth::id())
                           ->with('profile')
                           ->select('id', 'profile_id', 'amount', 'created_at')
@@ -31,8 +35,8 @@ class DashboardController extends Controller
                           ->get();
 
         $transactions = $incomes->merge($expenses)->sortByDesc('created_at');
-        $transactions = $this->paginate($transactions,6);
-       return view('back.dashboard',compact('totalIncomes','totalExpenses','transactions','netSaving'));
+        $transactions = $this->paginate($transactions,perPage: 6);
+       return view('back.dashboard',compact('totalIncomes','totalExpenses','transactions','netSaving','totalbalance'));
 
     }
     private function paginate($items, $perPage)
@@ -50,9 +54,40 @@ class DashboardController extends Controller
     }    /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function getchartData()
     {
-        //
+        // Get all categories
+        $categories = Category::where('user_id',Auth::id())->get();
+
+        // Get expenses grouped by category for the current user
+        $expenses = Expense::join('category', 'expenses.category_id', '=', 'category.id')
+            ->where('expenses.user_id', Auth::id())
+            ->selectRaw('category.name, SUM(expenses.amount) as total')
+            ->groupBy('category.name')
+            ->get()
+            ->keyBy('name');
+
+        // Prepare chart data with all categories and their expense totals
+        $chartData = $categories->map(function ($category) use ($expenses) {
+            return [
+                'name' => $category->name,
+                'total' => $expenses->has($category->name) ? floatval($expenses[$category->name]['total']) : 0
+            ];
+        });
+
+        // Extract names and amounts for the chart
+        $categoryNames = $chartData->pluck('name')->toArray();
+        $categoryAmounts = $chartData->pluck('total')->toArray();
+
+        // Log for debugging
+        \Log::info('Chart Categories:', $categoryNames);
+        \Log::info('Chart Amounts:', $categoryAmounts);
+
+        // Return JSON response for the chart
+        return response()->json([
+            'categories' => $categoryNames,
+            'amounts' => $categoryAmounts,
+        ]);
     }
 
     /**
