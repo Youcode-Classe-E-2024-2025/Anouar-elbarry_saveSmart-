@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\expenseController;
+use App\Http\Controllers\goalsController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\ProfilesController;
 use Illuminate\Support\Facades\Route;
@@ -23,10 +24,9 @@ Route::get('/', function () {
     return view('front/home');
 })->name('home');
 Route::get('/dashboard', [DashboardController::class,'index']);
+Route::get('/chart-data', [DashboardController::class,'getchartData']);
 
-Route::get('/goals', function () {
-    return view('back/goals');
-});
+
 Route::get('/reports', function () {
     return view('back/reports');
 });
@@ -64,3 +64,7 @@ Route::get('/expense/{id}/edit',[expenseController::class,'edit']);
 Route::put('/expense/{id}/update',[expenseController::class,'update']);
 Route::post('/expense/create',[expenseController::class,'create'])->name('expense.create');
 Route::delete('/expense/delet/{id}',[expenseController::class,'destroy'])->name('expense.delet');
+
+//Goals
+Route::get('/goals', [goalsController::class,'index'])->name('goals');
+Route::post('/goals/create', [goalsController::class,'create'])->name('goal.create');
