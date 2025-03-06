@@ -1,5 +1,5 @@
 @extends("back.base-dash")
-    @section('main')
+@section('main')
                       <div id="quick-actions" class="mb-8 flex space-x-4">
                           <button class="flex items-center px-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm hover:bg-neutral-50">
                               <i class="fa-solid fa-plus mr-2"></i>
@@ -14,34 +14,39 @@
                               View Reports
                           </button>
                       </div>
-                      <div id="overview-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                      <div id="overview-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white p-6 rounded-lg shadow-lg border border-neutral-200 transition-transform transform hover:scale-105">
+        <h2 class="text-lg mb-2 font-semibold">Total Balance</h2>
+        <p class="text-3xl font-bold text-green-600">{{ $totalbalance[0]->amount }} <span class="text-gray-500">DH</span></p>
+        <p class="text-sm text-neutral-500 mt-2">+12.5% from last month</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-lg border border-neutral-200 transition-transform transform hover:scale-105">
+        <h2 class="text-lg mb-2 font-semibold">Total Income</h2>
+        <p class="text-3xl font-bold text-blue-600">{{ $totalIncomes }} <span class="text-gray-500">DH</span></p>
+        <p class="text-sm text-neutral-500 mt-2">+12.5% from last month</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-lg border border-neutral-200 transition-transform transform hover:scale-105">
+        <h2 class="text-lg mb-2 font-semibold">Total Expenses</h2>
+        <p class="text-3xl font-bold text-red-600">{{ $totalExpenses }} <span class="text-gray-500">DH</span></p>
+        <p class="text-sm text-neutral-500 mt-2">-3.2% from last month</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-lg border border-neutral-200 transition-transform transform hover:scale-105">
+        <h2 class="text-lg mb-2 font-semibold">Net Savings</h2>
+        <p class="text-3xl font-bold text-purple-600">{{ $netSaving }} <span class="text-gray-500">DH</span></p>
+        <p class="text-sm text-neutral-500 mt-2">+28.4% from last month</p>
+    </div>
+</div>
+                      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                           <div class="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
-                              <h2 class="text-lg mb-2">Total Income</h2>
-                              <p class="text-3xl">{{ $totalIncomes }} <span class="text-gray-500">DH</span></p>
-                              <p class="text-sm text-neutral-500 mt-2">+12.5% from last month</p>
-                          </div>
-                          <div class="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
-                              <h2 class="text-lg mb-2">Total Expenses</h2>
-                              <p class="text-3xl">{{ $totalExpenses }} <span class="text-gray-500">DH</span></p>
-                              <p class="text-sm text-neutral-500 mt-2">-3.2% from last month</p>
-                          </div>
-                          <div class="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
-                              <h2 class="text-lg mb-2">Net Savings</h2>
-                              <p class="text-3xl">{{ $netSaving }} <span class="text-gray-500">DH</span></p>
-                              <p class="text-sm text-neutral-500 mt-2">+28.4% from last month</p>
-                          </div>
-                      </div>
-                      <div id="charts-section" class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                          <div class="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
-                              <h2 class="text-lg mb-4">Expense Breakdown</h2>
+                              <h2 class="text-lg mb-4">Income Breakdown</h2>
                               <div class="bg-neutral-100 h-[300px] rounded flex items-center justify-center">
                                   <span class="text-neutral-600">Pie Chart Visualization</span>
                               </div>
                           </div>
                           <div class="bg-white p-6 rounded-lg shadow-sm border border-neutral-200">
-                              <h2 class="text-lg mb-4">Income Sources</h2>
-                              <div class="bg-neutral-100 h-[300px] rounded flex items-center justify-center">
-                                  <span class="text-neutral-600">Bar Chart Visualization</span>
+                              <h2 class="text-lg mb-4">Expense vs Income</h2>
+                              <div id="expense-chart" class="bg-neutral-100 h-[300px] rounded flex items-center justify-center">
+                                  
                               </div>
                           </div>
                       </div>
@@ -67,3 +72,40 @@
                       </div>
                       @endsection
                         
+@section('script')
+<script>
+    
+    // Expense Chart
+   document.addEventListener('DOMContentLoaded', function() {
+    fetch('/chart-data')
+        .then(response => response.json())
+        .then(data => {
+            var expenseOptions = {
+                series: data.amounts || [],
+                chart: {
+                    type: 'pie',
+                    height: 300
+                },
+                labels: data.categories || [],
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+            
+            var expenseChart = new ApexCharts(document.querySelector("#expense-chart"), expenseOptions);
+            expenseChart.render();
+        });
+        // console.log(data.categories);
+        
+});
+
+</script>
+@endsection
