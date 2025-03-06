@@ -102,7 +102,7 @@
                     <div class="mb-4">
                         <label for="source" class="block text-sm font-medium text-gray-700 mb-1">Source:</label>
                         <div class="relative">
-                            <select id="source" name="source" required
+                            <select id="source" name="source" 
                                 class="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none">
                                 <option value="" disabled selected>Select income source</option>
                                 <option value="salary">Salary</option>
@@ -134,7 +134,7 @@
                     <!-- Amount Field -->
                     <div class="mb-4">
                         <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Amount:</label>
-                        <input type="number" id="amount" name="amount" step="0.01" required
+                        <input type="number" id="amount" name="amount" step="0.01" 
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                             @error('amount')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -144,7 +144,7 @@
                     <!-- Date Field -->
                     <div class="mb-6">
                         <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Date:</label>
-                        <input type="date" id="date" name="date" required
+                        <input type="date" id="date" name="date" 
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                             @error('date')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -160,7 +160,7 @@
         </div>
     </div>
 
-     <div id="Update_modalBackdrop" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 invisible transition-all duration-300">
+     <div id="Update_modalBackdrop" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 @if ($errors->any()) opacity-100 @else opacity-0 @endif invisible transition-all duration-300">
         <!-- Modal Container -->
         <div id="update_incomeModal" class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 transform -translate-y-4 transition-all duration-300">
             <!-- Modal Header -->
@@ -184,7 +184,7 @@
                      <div class="mb-4">
                          <label for="update_source" class="block text-sm font-medium text-gray-700 mb-1">Source:</label>
                          <div class="relative">
-                             <select id="update_source" name="source" required
+                             <select id="update_source" name="source" 
                                  class="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none">
                                  <option value="" disabled selected>Select income source</option>
                                  <option value="salary">Salary</option>
@@ -207,7 +207,7 @@
                      <!-- Amount Field -->
                      <div class="mb-4">
                          <label for="update_amount" class="block text-sm font-medium text-gray-700 mb-1">Amount:</label>
-                         <input type="number" id="Update_amount" name="amount" step="0.01" required
+                         <input type="number" id="Update_amount" name="amount" step="0.01" 
                              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                              @error('amount')
                              <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -218,7 +218,7 @@
                      <!-- Date Field -->
                      <div class="mb-6">
                          <label for="update_date" class="block text-sm font-medium text-gray-700 mb-1">Date:</label>
-                         <input type="date" id="update_date" name="date" required
+                         <input type="date" id="update_date" name="date" 
                              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                              @error('date')
                              <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -272,6 +272,45 @@
             update_modal.classList.add('translate-y-0');
         }, 10);
     }
+    
+
+    update_incomeForm.addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+    const incomeId = update_incomeForm.dataset.id;
+    const formData = new FormData(this);
+
+    fetch(`/income/${incomeId}/update`, { // Corrected URL here
+        method: 'PUT',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => {
+        console.log(response);
+        if (!response.ok) {
+            console.log("error occured");
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log(data);
+        // Handle success (e.g., close modal, update UI)
+        //close the modal
+        update_modalBackdrop.classList.remove('opacity-100');
+        update_modalBackdrop.classList.add('opacity-0');
+        update_modal.classList.remove('translate-y-0');
+        update_modal.classList.add('-translate-y-4');
+        setTimeout(()=>{
+            update_modalBackdrop.classList.add('invisible');
+        },300);
+
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Handle error (e.g., display error message)
+    });
+});
 
     // Close modal function
     function update_closeModal() {
