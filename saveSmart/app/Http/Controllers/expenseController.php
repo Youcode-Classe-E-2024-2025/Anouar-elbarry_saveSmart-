@@ -38,7 +38,9 @@ class expenseController extends Controller
             'amount' => $request->amount,
             'date' => $request->date,
         ]);
+        
         if($expense){
+            balanceController::updateTotalBalance();
             return redirect()->back()->with('success', 'expense record created successfully.');
         }else{
             return redirect()->back()->with('error', 'expense record has not created.');
@@ -83,6 +85,7 @@ class expenseController extends Controller
                  'date' => 'required|date|before_or_equal:today', 
         ]);
         $expense->update($validated);
+        balanceController::updateTotalBalance();
         return redirect()->back()->with('success','expense updated successfully');
     }
 
@@ -93,6 +96,7 @@ class expenseController extends Controller
     {
         $expense = Expense::findOrFail($id);
         $expense->delete();
+        balanceController::updateTotalBalance();
         return redirect()->back()->with('success','expense deleted successfully');
     }
 }
