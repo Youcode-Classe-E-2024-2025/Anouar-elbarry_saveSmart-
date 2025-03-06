@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -42,4 +43,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    protected static function boot(){
+        parent::boot();
+        static::created(function($user){
+            DB::table('totalbalance')->insert([
+                'amount' => 0,
+                'user_id' => $user->id,
+                'created_at' => now()
+            ]);
+    });
+}
 }
