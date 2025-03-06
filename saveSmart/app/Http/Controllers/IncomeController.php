@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expense;
+use App\Models\goals;
 use Illuminate\Http\Request;
 use App\Models\Income;
 use Illuminate\Support\Facades\Auth;
+use App\Models\totalbalance;
 class IncomeController extends Controller
 {
     /**
@@ -35,6 +38,10 @@ class IncomeController extends Controller
             'amount' => $request->amount,
             'date' => $request->date,
         ]);
+
+        $totalbalance = balanceController::updateTotalBalance();
+        \Log::info($totalbalance);
+
         if($income){
             return redirect()->back()->with('success', 'Income record created successfully.');
         }else{
@@ -75,13 +82,15 @@ class IncomeController extends Controller
     {
         $income = Income::findOrFail($id);
         $validated = $request->validate([
-        'source' => 'required',
+        'source' => 'required|string',
         'amount' => 'required|numeric|min:0',
         'date' => 'required|date|before_or_equal:today'
         ]);
         try {
             // dd($income);
             $income->update($validated);
+            balanceController::updateTotalBalance();
+
             // dd($income->update($validated));
             return redirect()->route('income.home')->with('success', 'Income updated successfully');
         } catch (\Exception $e) {
@@ -97,6 +106,7 @@ class IncomeController extends Controller
     {
         $income = Income::findOrFail($id);
         $income->delete();
+        balanceController::updateTotalBalance();
         return redirect()->back()->with('success','Income deleted successfully!');
     }
 }
