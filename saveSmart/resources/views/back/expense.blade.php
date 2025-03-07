@@ -5,6 +5,16 @@
                                   <i class="fa-solid fa-plus mr-2"></i>
                                   Add Expense
                               </button>
+                              <div class="flex justify-evenly gap-4 items-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg border border-neutral-200 mb-6">
+        <h2 class="text-lg font-semibold">Total Used Amount</h2>
+        <p class="text-3xl font-bold text-green-600">{{ $totalUsed }} <span class="text-gray-500">DH</span></p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-lg border border-neutral-200 mb-6">
+        <h2 class="text-lg font-semibold">Available Amount</h2>
+        <p class="text-3xl font-bold text-green-600">{{$available}} <span class="text-gray-500">DH</span></p>
+    </div>
+        </div>
                               <div class="flex flex-wrap gap-4">
                                   <div class="relative">
                                       <input type="date" class="px-4 py-2 border border-neutral-200 rounded-lg" value="2025-01-01"/>
@@ -21,6 +31,10 @@
                                       <option>Sarah</option>
                                       <option>Emma</option>
                                   </select>
+                                  <a href="{{ route('report.general') }}" class="flex items-center px-3 py-2 bg-white border border-neutral-200 rounded-lg text-sm hover:bg-neutral-50">
+                                  <i class="fa-solid fa-file-pdf mr-2"></i>
+                        Export PDF
+                              </a>
                               </div>
                           </div>
                           <div id="expenses-table" class="bg-white rounded-lg shadow-sm border border-neutral-200">

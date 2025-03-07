@@ -25,6 +25,7 @@ Route::get('/', function () {
 })->name('home');
 Route::get('/dashboard', [DashboardController::class,'index']);
 Route::get('/chart-data', [DashboardController::class,'getchartData']);
+Route::get('/dashboard_report', [DashboardController::class, 'generateDashboardReport'])->name('report.dashboard');
 
 
 Route::get('/reports', function () {
@@ -64,7 +65,10 @@ Route::get('/expense/{id}/edit',[expenseController::class,'edit']);
 Route::put('/expense/{id}/update',[expenseController::class,'update']);
 Route::post('/expense/create',[expenseController::class,'create'])->name('expense.create');
 Route::delete('/expense/delet/{id}',[expenseController::class,'destroy'])->name('expense.delet');
+Route::get('/general-report', [expenseController::class, 'generateGeneralReport'])->name('report.general');
 
 //Goals
 Route::get('/goals', [goalsController::class,'index'])->name('goals');
 Route::post('/goals/create', [goalsController::class,'create'])->name('goal.create');
+Route::put('/goals/{id}/update', [goalsController::class, 'update'])->name('goal.update');
+Route::delete('/goals/{id}/delete', [goalsController::class,'destroy'])->name('goal.delete');

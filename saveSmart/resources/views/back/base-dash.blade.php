@@ -38,12 +38,7 @@
                         <span>Categories</span>
                     </a>
                 </li>
-                              <li>
-                    <a href="/reports" class="flex items-center space-x-3 px-3 py-2 bg-neutral-100 rounded-lg">
-                        <i class="fa-solid fa-chart-line"></i>
-                        <span>Reports</span>
-                    </a>
-                </li>
+                             
             <li>
                 <a href="#" class="flex items-center space-x-3 px-3 py-2 hover:bg-neutral-50 rounded-lg transition">
                     <i class="fa-solid fa-gear"></i>

@@ -6,43 +6,55 @@
             Add New Goal
         </button>
     </div>
-    <div id="goals-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="flex justify-evenly items-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg border border-neutral-200 mb-6">
+        <h2 class="text-lg font-semibold">Total Used Amount</h2>
+        <p class="text-3xl font-bold text-green-600">{{ $totalUsed }} <span class="text-gray-500">DH</span></p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-lg border border-neutral-200 mb-6">
+        <h2 class="text-lg font-semibold">Available Amount</h2>
+        <p class="text-3xl font-bold text-green-600">{{$available}} <span class="text-gray-500">DH</span></p>
+    </div>
+        </div>
+        <div id="goals-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @if ($goals)
             @foreach ($goals as $goal)
-                <div class="bg-white p-6 rounded-lg border border-neutral-200 shadow-sm">
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <h3 class="text-lg">{{ $goal->title }}</h3>
-                            <p class="text-neutral-600">Target: {{$goal->target_amount}}</p>
-                        </div>
-                        <div class="flex space-x-2">
-                            <button class="text-neutral-600 hover:text-neutral-900">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </button>
-                            <button class="text-neutral-600 hover:text-neutral-900">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        <div class="h-2 bg-neutral-100 rounded-full">
-                            <div class="h-2 bg-neutral-800 rounded-full w-[{{ $goal->progress }}%] max-w-[100%]"></div>
-                        </div>
-                        <div class="flex justify-between mt-2 text-sm">
-                            <span>{{$goal->saved_amount}} saved</span>
-                            <span>{{$goal->progress}}%</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-2 text-sm text-neutral-600">
-                        <img src="storage/{{$goal->profile->avatar}}" class="w-6 h-6 rounded-full"/>
-                        <span>Added by {{$goal->profile->name}}</span>
-                    </div>
-                    <div class="mt-4">
-                        <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md shadow-sm transition-colors">
-                            Save 
-                        </button>
-                    </div>
-                </div>
+            <div class="bg-white p-6 rounded-lg border border-neutral-200 shadow-sm">
+    <div class="flex justify-between items-start mb-4">
+        <div>
+            <h3 class="text-lg">{{ $goal->title }}</h3>
+            <p class="text-neutral-600">Target: {{$goal->target_amount}}</p>
+            <p class="text-neutral-600" id="deadline-{{ $goal->id }}" data-deadline="{{ $goal->deadline }}">
+    Deadline: <span class="formatted-deadline">{{ $goal->formatted_deadline }}</span>
+</p>
+        </div>
+        <div class="flex space-x-2">
+        <button class="text-neutral-600 hover:text-neutral-900" onclick="opensavingModal({{ $goal->id }}, {{ $goal->saved_amount }})">
+    <i class="fa-solid fa-pen-to-square"></i>
+</button>
+            <form method="post" action="{{ route('goal.delete',$goal->id) }}" class="text-neutral-600 hover:text-neutral-900 p-0 m-0">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                  </form>
+        </div>
+    </div>
+    <div class="mb-4">
+        <div class="h-2 bg-neutral-100 rounded-full">
+            <div class="h-2 bg-neutral-800 rounded-full w-[{{ $goal->progress }}%] max-w-[100%]"></div>
+        </div>
+        <div class="flex justify-between mt-2 text-sm">
+            <span>{{$goal->saved_amount}} saved</span>
+            <span>{{$goal->progress}}%</span>
+        </div>
+    </div>
+    <div class="flex items-center space-x-2 text-sm text-neutral-600">
+        <img src="storage/{{$goal->profile->avatar}}" class="w-6 h-6 rounded-full"/>
+        <span>Added by {{$goal->profile->name}}</span>
+    </div>
+</div>
             @endforeach
         @else
             <div class="py-12">
@@ -104,6 +116,14 @@
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+                    <!-- Deadline Field -->
+                    <div class="mb-4">
+                        <label for="deadline" class="block text-sm font-medium text-gray-700 mb-1">Deadline :</label>
+                        <input type="date" id="deadline" name="deadline" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        @error('deadline')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                     <!-- Initial Saved Amount Field -->
                     <div class="mb-4">
                         <label for="saved_amount" class="block text-sm font-medium text-gray-700 mb-1">Initial Saved Amount:</label>
@@ -120,7 +140,23 @@
             </div>
         </div>
     </div>
-
+<!-- Update Saved Amount Modal -->
+<div id="updateSavedAmountModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg p-6 w-1/3">
+        <h2 class="text-lg font-semibold mb-4">Update Saved Amount</h2>
+        <form id="updateSavedAmountForm" method="POST" action="">
+            @csrf
+            @method('PUT') <!-- Assuming you want to use PUT for updates -->
+            <div class="mb-4">
+                <label for="update_saved_amount" class="block text-sm font-medium text-gray-700">Saved Amount</label>
+                <input type="number" id="update_saved_amount" name="saved_amount" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500" required>
+            </div>
+            <div class="flex justify-end">
+                <button type="button" class="mr-2 bg-gray-300 hover:bg-gray-400 text-black font-medium py-2 px-4 rounded-md" onclick="closesavingModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
 @section('script')
 
 <script>
@@ -167,6 +203,47 @@
                 closeModal();
             }
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+        // Select all elements with the class 'formatted-deadline'
+        document.querySelectorAll('[id^="deadline-"]').forEach(function(element) {
+            const deadline = new Date(element.getAttribute('data-deadline')).getTime();
+
+            // Update the countdown every second
+            const countdownInterval = setInterval(function() {
+                const now = new Date().getTime();
+                const distance = deadline - now;
+
+                // Calculate time components
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Display the result in the formatted deadline span
+                if (distance < 0) {
+                    clearInterval(countdownInterval);
+                    element.querySelector('.formatted-deadline').innerHTML = "Deadline reached";
+                } else {
+                    element.querySelector('.formatted-deadline').innerHTML = 
+                        `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds left`;
+                }
+            }, 1000);
+        });
+    });
+
+    function opensavingModal(goalId, savedAmount) {
+        document.getElementById('updateSavedAmountModal').classList.remove('hidden');
+        console.log(savedAmount);
+        
+        document.getElementById('update_saved_amount').value = savedAmount; // Set the current saved amount
+        document.getElementById('updateSavedAmountForm').action = `/goals/${goalId}/update`; // Set the form action to the update route
+        
+    }
+
+    function closesavingModal() {
+        document.getElementById('updateSavedAmountModal').classList.add('hidden');
+    }
 </script>
 
 @endsection

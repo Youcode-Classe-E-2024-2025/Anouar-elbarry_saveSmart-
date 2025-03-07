@@ -6,9 +6,11 @@ use App\Models\Category;
 use App\Models\Expense;
 use App\Models\goals;
 use App\Models\Income;
+use App\Models\savings;
 use App\Models\totalbalance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class DashboardController extends Controller
 {
@@ -19,7 +21,7 @@ class DashboardController extends Controller
     {
        $totalIncomes= Income::where('user_id',Auth::id())->sum('amount');
        $totalExpenses= Expense::where('user_id',Auth::id())->sum('amount');
-       $netSaving= goals::where('user_id',Auth::id())->sum('saved_amount');
+       $netSaving= savings::where('user_id',Auth::id())->get();
        $totalbalance = totalbalance::where('user_id',Auth::id())->get();
     //    dd($totalbalance);
        $incomes = Income::where('user_id',Auth::id())
@@ -109,24 +111,47 @@ class DashboardController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function generateDashboardReport()
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $userId = Auth::id();
+    
+        // Calculate total expenses
+        $totalExpenses = Expense::where('user_id', $userId)->sum('amount');
+    
+        // Calculate total savings
+        $totalSavings = goals::where('user_id', $userId)->sum('saved_amount');
+    
+        // Calculate available amount
+        $needs = (totalbalance::where('user_id', $userId)->sum('amount')) * 0.5;
+        $totalUsed = Expense::where('user_id', $userId)->sum('amount');
+        $available = $needs - $totalUsed;
+    
+        // Calculate total goals
+        $totalGoals = goals::where('user_id', $userId)->count();
+    
+        // Calculate total income
+        $totalIncome = totalbalance::where('user_id', $userId)->sum('amount');
+    
+        // Calculate percentage of goals achieved
+        $goals = goals::where('user_id', $userId)->get();
+        $totalTargetAmount = $goals->sum('target_amount');
+        $totalSavedAmount = $goals->sum('saved_amount');
+        $percentageGoalsAchieved = $totalTargetAmount > 0 ? ($totalSavedAmount / $totalTargetAmount) * 100 : 0;
+    
+        // Prepare report data
+        $reportData = [
+            'total_expenses' => $totalExpenses,
+            'total_savings' => $totalSavings,
+            'available_amount' => $available,
+            'total_goals' => $totalGoals,
+            'total_income' => $totalIncome,
+            'percentage_goals_achieved' => round($percentageGoalsAchieved, 2), // Round to 2 decimal places
+        ];
+    
+        // Generate PDF
+        $pdf = PDF::loadView('back.reports.dashboard_report', compact('reportData'));
+    
+        // Return the PDF as a download
+        return $pdf->download('dashboard_report.pdf');
     }
 }

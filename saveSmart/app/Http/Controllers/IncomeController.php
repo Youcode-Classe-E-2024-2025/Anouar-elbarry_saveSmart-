@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Expense;
 use App\Models\goals;
+use App\Models\savings;
 use Illuminate\Http\Request;
 use App\Models\Income;
 use Illuminate\Support\Facades\Auth;
@@ -39,8 +40,8 @@ class IncomeController extends Controller
             'date' => $request->date,
         ]);
 
-        $totalbalance = balanceController::updateTotalBalance();
-        \Log::info($totalbalance);
+        savingsController::updateSavings();
+        balanceController::updateTotalBalance();
 
         if($income){
             return redirect()->back()->with('success', 'Income record created successfully.');

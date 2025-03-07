@@ -53,6 +53,14 @@ class User extends Authenticatable
                 'user_id' => $user->id,
                 'created_at' => now()
             ]);
-    });
+            DB::table('savings')->insert([
+                'amount' => 0,
+                'user_id' => $user->id,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        });
+
+    
 }
 }
