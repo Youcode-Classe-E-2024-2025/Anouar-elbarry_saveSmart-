@@ -40,8 +40,8 @@ class IncomeController extends Controller
             'date' => $request->date,
         ]);
 
-        savingsController::updateSavings();
         balanceController::updateTotalBalance();
+        savingsController::updateSavings();
 
         if($income){
             return redirect()->back()->with('success', 'Income record created successfully.');
@@ -91,6 +91,7 @@ class IncomeController extends Controller
             // dd($income);
             $income->update($validated);
             balanceController::updateTotalBalance();
+            savingsController::updateSavings();
 
             // dd($income->update($validated));
             return redirect()->route('income.home')->with('success', 'Income updated successfully');
@@ -108,6 +109,7 @@ class IncomeController extends Controller
         $income = Income::findOrFail($id);
         $income->delete();
         balanceController::updateTotalBalance();
+        savingsController::updateSavings();
         return redirect()->back()->with('success','Income deleted successfully!');
     }
 }

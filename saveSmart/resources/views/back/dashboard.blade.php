@@ -1,14 +1,6 @@
 @extends("back.base-dash")
 @section('main')
                       <div id="quick-actions" class="mb-8 flex space-x-4">
-                          <button class="flex items-center px-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm hover:bg-neutral-50">
-                              <i class="fa-solid fa-plus mr-2"></i>
-                              Add Income
-                          </button>
-                          <button class="flex items-center px-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm hover:bg-neutral-50">
-                              <i class="fa-solid fa-minus mr-2"></i>
-                              Add Expense
-                          </button>
                           <a href="{{ route('report.dashboard') }}" class="flex items-center px-3 py-2 bg-white border border-neutral-200 rounded-lg text-sm hover:bg-neutral-50">
                                   <i class="fa-solid fa-file-pdf mr-2"></i>
                         Export report PDF
@@ -17,23 +9,23 @@
                       <div id="overview-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <div class="bg-white p-6 rounded-lg shadow-lg border border-neutral-200 transition-transform transform hover:scale-105">
         <h2 class="text-lg mb-2 font-semibold">Total Balance</h2>
-        <p class="text-3xl font-bold text-green-600">{{ $totalbalance[0]->amount }} <span class="text-gray-500">DH</span></p>
-        <p class="text-sm text-neutral-500 mt-2">+12.5% from last month</p>
+        <p class="text-2xl font-bold text-green-600">{{ $totalbalance[0]->amount }} <span class="text-gray-500">DH</span></p>
+
     </div>
     <div class="bg-white p-6 rounded-lg shadow-lg border border-neutral-200 transition-transform transform hover:scale-105">
         <h2 class="text-lg mb-2 font-semibold">Total Income</h2>
-        <p class="text-3xl font-bold text-blue-600">{{ $totalIncomes }} <span class="text-gray-500">DH</span></p>
-        <p class="text-sm text-neutral-500 mt-2">+12.5% from last month</p>
+        <p class="text-2xl font-bold text-blue-600">{{ $totalIncomes }} <span class="text-gray-500">DH</span></p>
+
     </div>
     <div class="bg-white p-6 rounded-lg shadow-lg border border-neutral-200 transition-transform transform hover:scale-105">
         <h2 class="text-lg mb-2 font-semibold">Total Expenses</h2>
-        <p class="text-3xl font-bold text-red-600">{{ $totalExpenses }} <span class="text-gray-500">DH</span></p>
-        <p class="text-sm text-neutral-500 mt-2">-3.2% from last month</p>
+        <p class="text-2xl font-bold text-red-600">{{ $totalExpenses }} <span class="text-gray-500">DH</span></p>
+
     </div>
     <div class="bg-white p-6 rounded-lg shadow-lg border border-neutral-200 transition-transform transform hover:scale-105">
         <h2 class="text-lg mb-2 font-semibold">Net Savings</h2>
-        <p class="text-3xl font-bold text-purple-600">{{ $netSaving[0]->amount }} <span class="text-gray-500">DH</span></p>
-        <p class="text-sm text-neutral-500 mt-2">+28.4% from last month</p>
+        <p class="text-2xl font-bold text-purple-600">{{ $netSaving[0]->amount }} <span class="text-gray-500">DH</span></p>
+
     </div>
 </div>
                       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
